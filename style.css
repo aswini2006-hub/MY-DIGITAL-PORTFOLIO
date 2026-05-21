@@ -23,12 +23,14 @@
 body {
   font-family: 'Poppins', sans-serif;
   background:
-    radial-gradient(circle at top left, rgba(251, 113, 133, 0.28), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(6, 182, 212, 0.25), transparent 30%),
-    linear-gradient(135deg, #fff7fb, #f5f3ff, #ecfeff);
+    radial-gradient(circle at top left, rgba(255, 182, 193, 0.35), transparent 25%),
+    radial-gradient(circle at bottom right, rgba(173, 216, 230, 0.30), transparent 30%),
+    radial-gradient(circle at center, rgba(221, 214, 254, 0.25), transparent 35%),
+    linear-gradient(135deg, #fff8fc, #f7f4ff, #eefcff);
   color: var(--text);
   line-height: 1.7;
   overflow-x: hidden;
+  position: relative;
 }
 
 body.dark-pop {
@@ -38,6 +40,39 @@ body.dark-pop {
     linear-gradient(135deg, #fdf2f8, #f0f9ff, #f5f3ff);
 }
 
+/* FLOATING DOMAIN ICONS */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image:
+    url("https://cdn-icons-png.flaticon.com/512/2721/2721297.png"),
+    url("https://cdn-icons-png.flaticon.com/512/5968/5968292.png"),
+    url("https://cdn-icons-png.flaticon.com/512/1055/1055687.png"),
+    url("https://cdn-icons-png.flaticon.com/512/919/919825.png"),
+    url("https://cdn-icons-png.flaticon.com/512/5968/5968350.png");
+  background-repeat: no-repeat;
+  background-size: 70px, 55px, 60px, 65px, 55px;
+  background-position: 8% 18%, 88% 22%, 12% 78%, 85% 75%, 50% 92%;
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+/* EXTRA PASTEL BLOBS */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(168, 85, 247, 0.18), transparent 18%),
+    radial-gradient(circle at 80% 30%, rgba(6, 182, 212, 0.15), transparent 18%),
+    radial-gradient(circle at 70% 75%, rgba(251, 113, 133, 0.16), transparent 18%),
+    radial-gradient(circle at 25% 80%, rgba(250, 204, 21, 0.15), transparent 18%);
+}
+
+/* CURSOR GLOW — fixed lag with requestAnimationFrame */
 .cursor-glow {
   position: fixed;
   width: 22px;
@@ -48,7 +83,7 @@ body.dark-pop {
   box-shadow: 0 0 35px rgba(168, 85, 247, 0.55);
   transform: translate(-50%, -50%);
   z-index: 9999;
-  transition: 0.08s linear;
+  transition: none;
 }
 
 .container {
@@ -341,7 +376,6 @@ section {
 .info-grid,
 .skills-grid,
 .projects-grid,
-.resource-grid,
 .cert-grid {
   display: grid;
   gap: 24px;
@@ -374,39 +408,266 @@ section {
   grid-template-columns: repeat(3, 1fr);
 }
 
-.skill-card,
-.cert-card,
-.resource-card {
-  padding: 30px;
-  transition: 0.35s;
-  position: relative;
-  overflow: hidden;
+/* SKILL CARD */
+.skill-card {
+  padding: 24px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 10px 30px rgba(168, 85, 247, 0.10),
+    0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: 0.35s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 200px;
 }
 
+.skill-card i {
+  font-size: 2rem;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.skill-card h3 {
+  color: var(--heading);
+  margin-bottom: 10px;
+}
+
+/* PROJECTS GRID — each card full width, one per row */
+.projects-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  align-items: stretch;
+  margin-bottom: 24px;
+}
+
+.project-card {
+  overflow: hidden;
+  transition: 0.35s;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.project-card .project-top {
+  min-width: 200px;
+  width: 200px;
+  min-height: unset;
+  font-size: 3rem;
+  display: grid;
+  place-items: center;
+  color: white;
+  background: linear-gradient(135deg, var(--primary), var(--accent), var(--secondary));
+  flex-shrink: 0;
+}
+
+.project-card .project-body {
+  padding: 28px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* FULL WIDTH SDLC CARD */
+.project-card-full {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.project-card-full .project-top {
+  min-width: 200px;
+  width: 200px;
+  min-height: unset;
+  font-size: 3rem;
+  display: grid;
+  place-items: center;
+  color: white;
+  background: linear-gradient(135deg, var(--primary), var(--accent), var(--secondary));
+  flex-shrink: 0;
+}
+
+.project-card-full .project-body {
+  padding: 28px;
+  flex: 1;
+}
+
+/* TWO DETAIL BOXES SIDE BY SIDE */
+.project-details-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.project-details {
+  display: grid;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.detail-box {
+  padding: 18px;
+  border-radius: 18px;
+  background: linear-gradient(
+    135deg,
+    rgba(168, 85, 247, 0.10),
+    rgba(6, 182, 212, 0.08)
+  );
+}
+
+.detail-box strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--heading);
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .project-card,
+  .project-card-full {
+    flex-direction: column;
+  }
+
+  .project-card .project-top,
+  .project-card-full .project-top {
+    width: 100%;
+    min-width: unset;
+    min-height: 140px;
+  }
+
+  .project-details-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .project-card,
+  .project-card-full {
+    flex-direction: column;
+  }
+
+  .project-card .project-top,
+  .project-card-full .project-top {
+    width: 100%;
+    min-width: unset;
+    min-height: 130px;
+  }
+
+  .project-details-row {
+    grid-template-columns: 1fr;
+  }
+}
+/* RESOURCE CARD */
+.resource-card {
+  padding: 28px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 10px 30px rgba(168, 85, 247, 0.10),
+    0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: 0.35s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.resource-card i {
+  font-size: 2rem;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.resource-card h3 {
+  color: var(--heading);
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+}
+
+.resource-card p {
+  color: var(--text);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.resource-card span {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 30px;
+  color: #7e22ce;
+  background: rgba(168, 85, 247, 0.12);
+  font-size: 0.82rem;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.resource-card .project-buttons {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.resource-card:hover {
+  transform: translateY(-8px);
+  box-shadow:
+    0 18px 45px rgba(168, 85, 247, 0.22),
+    0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* RESOURCE GRID */
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+/* SHARED HOVER */
 .skill-card:hover,
 .project-card:hover,
-.resource-card:hover,
 .cert-card:hover,
 .timeline-item:hover,
 .info-box:hover {
   transform: translateY(-8px);
 }
 
-.skill-card i,
-.cert-card i,
-.resource-card i {
-  font-size: 2.2rem;
-  color: #a855f7;
-  margin-bottom: 15px;
+/* BUTTONS */
+.project-btn {
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #a855f7, #ec4899);
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: 0.3s ease;
+  display: inline-block;
 }
 
-.skill-card h3,
-.project-body h3,
-.resource-card h3,
-.timeline-item h3,
-.cert-card h3 {
-  color: var(--heading);
-  margin-bottom: 10px;
+.project-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(168, 85, 247, 0.25);
+}
+
+.secondary-btn {
+  background: white !important;
+  color: #7e22ce !important;
+  border: 1.5px solid rgba(168, 85, 247, 0.25);
 }
 
 .tags {
@@ -416,8 +677,7 @@ section {
   margin-top: 14px;
 }
 
-.tags span,
-.resource-card span {
+.tags span {
   padding: 8px 13px;
   border-radius: 30px;
   color: #7e22ce;
@@ -426,28 +686,7 @@ section {
   font-weight: 600;
 }
 
-.projects-grid {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.project-card {
-  overflow: hidden;
-  transition: 0.35s;
-}
-
-.project-top {
-  min-height: 160px;
-  display: grid;
-  place-items: center;
-  color: white;
-  font-size: 3rem;
-  background: linear-gradient(135deg, var(--primary), var(--accent), var(--secondary));
-}
-
-.project-body {
-  padding: 28px;
-}
-
+/* SEARCH BOX */
 .search-box {
   max-width: 620px;
   margin: 0 auto 35px;
@@ -473,15 +712,7 @@ section {
   font-size: 1rem;
 }
 
-.resource-grid {
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.resource-card span {
-  display: inline-block;
-  margin-top: 15px;
-}
-
+/* TIMELINE */
 .timeline {
   max-width: 850px;
   margin: auto;
@@ -499,10 +730,64 @@ section {
   font-weight: 700;
 }
 
+/* CERT */
 .cert-grid {
   grid-template-columns: repeat(3, 1fr);
 }
 
+.cert-card {
+  padding: 24px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 10px 30px rgba(168, 85, 247, 0.10),
+    0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: 0.35s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cert-card i {
+  font-size: 2rem;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.cert-card h3 {
+  color: var(--heading);
+  margin-bottom: 6px;
+}
+
+.cert-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.cert-btn {
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #a855f7, #ec4899);
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: 0.3s ease;
+  display: inline-block;
+}
+
+.cert-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(168, 85, 247, 0.3);
+}
+
+/* CONTACT */
 .contact-card {
   text-align: center;
   padding: 55px 35px;
@@ -523,21 +808,57 @@ section {
   margin-top: 25px;
 }
 
-.contact-links a {
-  padding: 14px 22px;
-  border-radius: 16px;
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 24px;
+  border-radius: 18px;
   background: white;
-  color: #7e22ce;
-  font-weight: 700;
+  color: var(--heading);
+  font-weight: 600;
   transition: 0.35s;
+  box-shadow: 0 8px 24px rgba(168, 85, 247, 0.10);
+  text-align: left;
 }
 
-.contact-links a:hover {
-  background: var(--primary);
+.contact-link i {
+  font-size: 1.6rem;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.contact-link h3 {
+  color: var(--heading);
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+}
+
+.contact-link span {
+  font-size: 0.82rem;
+  color: var(--text);
+}
+
+.contact-link:hover {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
   color: white;
   transform: translateY(-5px);
+  box-shadow: 0 14px 35px rgba(168, 85, 247, 0.28);
 }
 
+.contact-link:hover i {
+  background: white;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.contact-link:hover h3,
+.contact-link:hover span {
+  color: white;
+}
+
+/* FOOTER */
 .footer {
   padding: 42px 0;
   text-align: center;
@@ -556,6 +877,7 @@ section {
   margin-top: 18px;
 }
 
+/* SCROLL TOP */
 .scroll-top {
   position: fixed;
   right: 24px;
@@ -571,6 +893,7 @@ section {
   z-index: 999;
 }
 
+/* REVEAL ANIMATION */
 .reveal {
   opacity: 0;
   transform: translateY(40px);
@@ -582,6 +905,7 @@ section {
   transform: translateY(0);
 }
 
+/* SPARKLE */
 .sparkle {
   position: fixed;
   width: 10px;
@@ -598,7 +922,6 @@ section {
     opacity: 1;
     transform: scale(0.5) translateY(0);
   }
-
   to {
     opacity: 0;
     transform: scale(1.8) translateY(-35px);
@@ -606,15 +929,11 @@ section {
 }
 
 @keyframes floatCard {
-  0%, 100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-12px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
 }
 
+/* RESPONSIVE */
 @media (max-width: 900px) {
   .hero-grid,
   .skills-grid,
@@ -667,270 +986,12 @@ section {
   section {
     padding: 65px 0;
   }
-}
-<!-- RESOURCES -->
-<section id="resources">
 
-  <div class="container">
+  .resource-grid {
+    grid-template-columns: 1fr;
+  }
 
-    <div class="section-title">
-      <span class="section-tag">Portfolio Resources</span>
-
-      <h2>
-        Reports & <span>Documents</span>
-      </h2>
-
-      <p>
-        Academic reports, project presentations, certificates,
-        notebooks and portfolio resources.
-      </p>
-    </div>
-
-    <!-- SEARCH BOX -->
-
-    <div class="search-box reveal">
-
-      <i class="fa-solid fa-magnifying-glass"></i>
-
-      <input
-        type="text"
-        id="resourceSearch"
-        placeholder="Search reports, certificates, PPT, Excel..."
-      >
-
-    </div>
-
-    <!-- RESOURCE GRID -->
-
-    <div class="resource-grid">
-
-      <!-- INTERNSHIP REPORT -->
-
-      <div class="resource-card reveal"
-           data-name="cloud computing java internship report">
-
-        <i class="fa-solid fa-cloud"></i>
-
-        <h3>Cloud Computing Internship Report</h3>
-
-        <p>
-          Internship report on Cloud Computing using Java
-          submitted under University of Madras.
-        </p>
-
-        <span>Internship Report</span>
-
-        <div class="project-buttons">
-
-          <a href="documents/ASWINI PROJECT[1][1].docx"
-             download
-             class="project-btn">
-
-             Download Report
-          </a>
-
-        </div>
-
-      </div>
-
-
-
-      <!-- STUDENT PERFORMANCE REPORT -->
-
-      <div class="resource-card reveal"
-           data-name="student performance analysis python sql excel power bi">
-
-        <i class="fa-solid fa-chart-line"></i>
-
-        <h3>Student Performance Analysis</h3>
-
-        <p>
-          Final project report using Python, SQL,
-          Excel and Power BI for academic analysis.
-        </p>
-
-        <span>Final Project PDF</span>
-
-        <div class="project-buttons">
-
-          <a href="documents/NAAN MUDHALVAN FINAL PROJECT(4).pdf"
-             target="_blank"
-             class="project-btn">
-
-             View Report
-          </a>
-
-          <a href="documents/NAAN MUDHALVAN FINAL PROJECT(4).pdf"
-             download
-             class="project-btn secondary-btn">
-
-             Download
-          </a>
-
-        </div>
-
-      </div>
-
-
-
-      <!-- PPT -->
-
-      <div class="resource-card reveal"
-           data-name="project ppt presentation slides">
-
-        <i class="fa-solid fa-file-powerpoint"></i>
-
-        <h3>Final Project PPT</h3>
-
-        <p>
-          PowerPoint presentation containing dashboards,
-          charts, project workflow and insights.
-        </p>
-
-        <span>PPT Presentation</span>
-
-        <div class="project-buttons">
-
-          <a href="documents/FINAL PROJECT PPT(3).pptx"
-             download
-             class="project-btn">
-
-             Download PPT
-          </a>
-
-        </div>
-
-      </div>
-
-
-
-      <!-- EXCEL -->
-
-      <div class="resource-card reveal"
-           data-name="excel dashboard workbook charts pivot table">
-
-        <i class="fa-solid fa-file-excel"></i>
-
-        <h3>Excel Dashboard Workbook</h3>
-
-        <p>
-          Excel workbook containing dashboard analysis,
-          charts and pivot table reports.
-        </p>
-
-        <span>Excel Workbook</span>
-
-        <div class="project-buttons">
-
-          <a href="documents/EXCEL MAIN PROJECT.xlsx"
-             download
-             class="project-btn">
-
-             Download Excel
-          </a>
-
-        </div>
-
-      </div>
-
-
-
-      <!-- LOAN PYTHON NOTEBOOK -->
-
-      <div class="resource-card reveal"
-           data-name="loan data analysis python notebook">
-
-        <i class="fa-brands fa-python"></i>
-
-        <h3>Loan Data Analysis Notebook</h3>
-
-        <p>
-          Python notebook containing EDA,
-          charts and loan analysis using Pandas and Matplotlib.
-        </p>
-
-        <span>Jupyter Notebook</span>
-
-        <div class="project-buttons">
-
-          <a href="documents/loan_project (1).ipynb"
-             download
-             class="project-btn">
-
-             Download Notebook
-          </a>
-
-        </div>
-
-      </div>
-
-
-
-      <!-- LOAN PDF -->
-
-      <div class="resource-card reveal"
-           data-name="loan project python charts pdf">
-
-        <i class="fa-solid fa-file-pdf"></i>
-
-        <h3>Loan Project Python PDF</h3>
-
-        <p>
-          PDF export of Python analysis including
-          charts, graphs and loan approval insights.
-        </p>
-
-        <span>Python PDF</span>
-
-        <div class="project-buttons">
-
-          <a href="documents/loan_project python.pdf"
-             target="_blank"
-             class="project-btn">
-
-             View PDF
-          </a>
-
-          <a href="documents/loan_project python.pdf"
-             download
-             class="project-btn secondary-btn">
-
-             Download
-          </a>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-.cert-buttons{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:18px;
-}
-
-.cert-btn{
-  padding:10px 16px;
-  border-radius:12px;
-  background:linear-gradient(135deg,#a855f7,#ec4899);
-  color:white;
-  font-size:0.9rem;
-  font-weight:600;
-  transition:0.3s ease;
-  display:inline-block;
-}
-
-.cert-btn:hover{
-  transform:translateY(-4px);
-  box-shadow:0 10px 25px rgba(168,85,247,0.3);
-}
-
-.secondary-btn{
-  background:white;
-  color:#7e22ce;
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
 }
