@@ -8,6 +8,7 @@ document.querySelectorAll(".nav-links a").forEach(link => {
   });
 });
 
+/* TYPING EFFECT */
 const typingText = document.querySelector(".typing");
 
 const words = [
@@ -48,12 +49,12 @@ function typeEffect() {
 
 typeEffect();
 
+/* SCROLL REVEAL */
 const revealElements = document.querySelectorAll(".reveal");
 
 function revealOnScroll() {
   revealElements.forEach(element => {
     const elementTop = element.getBoundingClientRect().top;
-
     if (elementTop < window.innerHeight - 100) {
       element.classList.add("active");
     }
@@ -63,6 +64,7 @@ function revealOnScroll() {
 window.addEventListener("scroll", revealOnScroll);
 revealOnScroll();
 
+/* SCROLL TO TOP */
 const scrollTop = document.getElementById("scrollTop");
 
 window.addEventListener("scroll", () => {
@@ -70,19 +72,28 @@ window.addEventListener("scroll", () => {
 });
 
 scrollTop.addEventListener("click", () => {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
+  window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
+/* CURSOR GLOW — fixed with requestAnimationFrame, no lag */
 const cursorGlow = document.querySelector(".cursor-glow");
+let mouseX = 0;
+let mouseY = 0;
 
 document.addEventListener("mousemove", event => {
-  cursorGlow.style.left = event.clientX + "px";
-  cursorGlow.style.top = event.clientY + "px";
+  mouseX = event.clientX;
+  mouseY = event.clientY;
 });
 
+function animateCursor() {
+  cursorGlow.style.left = mouseX + "px";
+  cursorGlow.style.top  = mouseY + "px";
+  requestAnimationFrame(animateCursor);
+}
+
+animateCursor();
+
+/* CLICK SPARKLES */
 document.addEventListener("click", event => {
   for (let i = 0; i < 8; i++) {
     const sparkle = document.createElement("span");
@@ -92,18 +103,17 @@ document.addEventListener("click", event => {
     const randomY = Math.random() * 50 - 25;
 
     sparkle.style.left = event.clientX + randomX + "px";
-    sparkle.style.top = event.clientY + randomY + "px";
+    sparkle.style.top  = event.clientY + randomY + "px";
 
     document.body.appendChild(sparkle);
 
-    setTimeout(() => {
-      sparkle.remove();
-    }, 700);
+    setTimeout(() => sparkle.remove(), 700);
   }
 });
 
+/* RESOURCE SEARCH */
 const resourceSearch = document.getElementById("resourceSearch");
-const resourceCards = document.querySelectorAll(".resource-card");
+const resourceCards  = document.querySelectorAll(".resource-card");
 
 resourceSearch.addEventListener("input", () => {
   const searchValue = resourceSearch.value.toLowerCase();
@@ -112,17 +122,15 @@ resourceSearch.addEventListener("input", () => {
     const cardData = card.dataset.name.toLowerCase();
     const cardText = card.innerText.toLowerCase();
 
-    if (cardData.includes(searchValue) || cardText.includes(searchValue)) {
-      card.style.display = "block";
-    } else {
-      card.style.display = "none";
-    }
+    card.style.display =
+      (cardData.includes(searchValue) || cardText.includes(searchValue))
+        ? "flex"
+        : "none";
   });
 });
 
+/* FOOTER YEAR */
 const footerCopy = document.querySelector(".footer-copy");
-
 if (footerCopy) {
-  const currentYear = new Date().getFullYear();
-  footerCopy.innerHTML = `© ${currentYear} Aswini A. All Rights Reserved.`;
+  footerCopy.innerHTML = `© ${new Date().getFullYear()} Aswini A. All Rights Reserved.`;
 }
